@@ -5,16 +5,19 @@
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='mwitter.css') }}">
 </head>
 <body>
-  <h1>ÉÜÅ[ÉUÅ[{{ user.name}} / <a href="/">mwitter!</a></h1>
-  <h2>ÉcÉCÅ[Ég</h2>
+  <h1>„É¶„Éº„Ç∂„Éº{{ user.name}} / <a href="/">mwitter!</a></h1>
+  <h2>„ÉÑ„Ç§„Éº„Éà</h2>
   {% for tweet in tweets %}
     <div>
       <a href="{{ url_for('user', name=tweet.author.name) }}">{{tweet.author.name}}</a>
       {{tweet.text}}
     </div>
   {% endfor %}
-  {% endfor %}
+  <div class="form">
+    <form action="{{ url_for('follow_user', name=user.name) }}" method="POST">
+      <input type="submit" value="„Éï„Ç©„É≠„Éº„Åô„Çã">
+    </form>
+  </div>
 </body>
 </html>
-
 
