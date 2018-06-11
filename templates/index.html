@@ -14,10 +14,11 @@
       </a>としてログイン
     </div>
     {% endfor %}
-    <div class="form">新規ユーザー
+    <div class="form">
       <form action="users/create" method="POST">
-        <div><input name="name"></div>
-        <div><input type="submit"></div>
+        新規ユーザー
+        <input name="name">
+        <input type="submit" value="登録">
       </form>
     </div>
   <h2>すべてのツイート</h2>

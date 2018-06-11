@@ -6,6 +6,12 @@
 </head>
 <body>
   <h1>ユーザー{{ user.name}} / <a href="/">mwitter!</a></h1>
+  <h2>フォローしているユーザー</h2>
+  {% for following in user.get_followings() %}
+    <div>
+      <a href="{{ url_for('user', name=following.name) }}">{{following.name}}</a>
+    </div>
+  {% endfor %}
   <h2>ツイート</h2>
   {% for tweet in tweets %}
     <div>

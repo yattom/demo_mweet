@@ -18,6 +18,12 @@ class User:
     def 取得(name):
         return [u for u in User.users if u.name == name][0]
 
+    def get_followings(self):
+        return [f.target for f in Follow.follows if f.follower==self]
+
+    def get_timeline(self):
+        return [t for t in Tweet.tweets if t.author == self or t.author in self.get_followings()]
+
 
 class Tweet:
     tweets = []
@@ -36,6 +42,17 @@ class Tweet:
         return [t for t in Tweet.tweets if t.author == author]
 
 
+class Follow:
+    follows = []
+
+    @staticmethod
+    def 新規作成(follower, target):
+        follow = Follow()
+        follow.follower = follower
+        follow.target = target
+        Follow.follows.append(follow)
+        return follow
+
 User.新規作成('自分')
 
 
@@ -47,13 +64,13 @@ def index():
 
 @app.route("/login")
 def login():
-    session['username'] = request.args.get('login')
+    session['login'] = request.args.get('login')
     return redirect('timeline')
 
 @app.route("/timeline")
 def users_timeline():
-    user=User.取得(session['username'])
-    tweets = Tweet.tweets
+    user = User.取得(session['login'])
+    tweets = user.get_timeline()
     return render_template('timeline.html', user=user, tweets=tweets)
 
 @app.route("/users/create", methods=['POST'])
@@ -73,9 +90,10 @@ def user(name):
     tweets = Tweet.取得(author=user)
     return render_template('user.html', user=user, tweets=tweets)
 
-@app.route("/users/<name>/followings", methods=['POST'])
+@app.route("/users/<name>/follow", methods=['POST'])
 def follow_user(name):
-    user = User.取得(name)
-    tweet = Tweet.新規作成(user=user, text=request.form['text'])
-    return redirect(url_for('users_timeline', name=user.name))
+    follower = User.取得(session['login'])
+    target = User.取得(name)
+    Follow.新規作成(follower=follower, target=target)
+    return redirect(url_for('user', name=target.name))
 

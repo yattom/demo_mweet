@@ -9,8 +9,8 @@
   <h2>ツイート</h2>
   <div class="form">
     <form action="{{ url_for('create_tweet', name=user.name) }}" method="POST">
-      <div>新しいツイート <input name="text"></div>
-      <div><input type="submit" value="ツイート"></div>
+      新しいツイート <input name="text">
+      <input type="submit" value="ツイート">
     </form>
   </div>
   {% for tweet in tweets %}
