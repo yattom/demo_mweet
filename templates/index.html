@@ -1,0 +1,30 @@
+<!doctype HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" value="text/html; charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='mwitter.css') }}">
+</head>
+<body>
+  <h1>mwitter!</h1>
+  {% if users %}
+    <h2>ユーザー</h2>
+    {% for user in users %}
+    <div>
+      <a href="{{ url_for('users_timeline', name=user.name) }}">
+        {{ user.name }}
+      </a>
+    </div>
+    {% endfor %}
+    <div class="form">新規ユーザー
+      <form action="users/create" method="POST">
+        <div><input name="name"></div>
+        <div><input type="submit"></div>
+      </form>
+    </div>
+  {% endif %}
+  <h2>ツイート</h2>
+  {% for tweet in tweet %}
+  <div>{{tweet.author.name}} {{tweet.text}}</div>
+  {% endfor %}
+</body>
+</html>
