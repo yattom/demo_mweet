@@ -6,7 +6,6 @@
 </head>
 <body>
   <h1>mwitter!</h1>
-  {% if users %}
     <h2>ユーザー</h2>
     {% for user in users %}
     <div>
@@ -21,7 +20,6 @@
         <div><input type="submit"></div>
       </form>
     </div>
-  {% endif %}
   <h2>ツイート</h2>
   {% for tweet in tweet %}
   <div>{{tweet.author.name}} {{tweet.text}}</div>
