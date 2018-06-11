@@ -1,0 +1,20 @@
+<!doctype HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" value="text/html; charset=utf-8">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='mwitter.css') }}">
+</head>
+<body>
+  <h1>ユーザー{{ user.name}} / <a href="/">mwitter!</a></h1>
+  <h2>ツイート</h2>
+  {% for tweet in tweets %}
+    <div>
+      <a href="{{ url_for('user', name=tweet.author.name) }}">{{tweet.author.name}}</a>
+      {{tweet.text}}
+    </div>
+  {% endfor %}
+  {% endfor %}
+</body>
+</html>
+
+

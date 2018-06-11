@@ -5,22 +5,14 @@
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='mwitter.css') }}">
 </head>
 <body>
-  <h1>mwitter!</h1>
-    <h2>ユーザー</h2>
-    {% for user in users %}
-    <div>
-      <a href="{{ url_for('users_timeline', name=user.name) }}">
-        {{ user.name }}
-      </a>
-    </div>
-    {% endfor %}
-    <div class="form">新規ユーザー
-      <form action="users/create" method="POST">
-        <div><input name="name"></div>
-        <div><input type="submit"></div>
-      </form>
-    </div>
+  <h1>{{ user.name}}のタイムライン / <a href="/">mwitter!</a></h1>
   <h2>ツイート</h2>
+  <div class="form">
+    <form action="{{ url_for('create_tweet', name=user.name) }}" method="POST">
+      <div>新しいツイート <input name="text"></div>
+      <div><input type="submit" value="ツイート"></div>
+    </form>
+  </div>
   {% for tweet in tweets %}
   <div>
     <a href="{{ url_for('user', name=tweet.author.name) }}">{{tweet.author.name}}</a>
@@ -29,3 +21,4 @@
   {% endfor %}
 </body>
 </html>
+

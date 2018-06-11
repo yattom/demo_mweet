@@ -30,17 +30,25 @@ class Tweet:
         print(Tweet.tweets)
         return tweet
 
+    @staticmethod
+    def 取得(author):
+        return [t for t in Tweet.tweets if t.author == author]
+
 
 User.新規作成('自分')
 
 
 @app.route("/")
 def index():
-    return render_template('index.html', users=User.users, tweets=Tweet.tweets)
+    users = User.users
+    tweets = Tweet.tweets
+    return render_template('index.html', users=users, tweets=tweets)
 
 @app.route("/users/<name>/timeline")
 def users_timeline(name):
-    return render_template('timeline.html', user=User.取得(name), tweets=Tweet.tweets)
+    user=User.取得(name)
+    tweets = Tweet.tweets
+    return render_template('timeline.html', user=user, tweets=tweets)
 
 @app.route("/users/create", methods=['POST'])
 def create_user():
@@ -52,4 +60,10 @@ def create_tweet(name):
     user = User.取得(name)
     tweet = Tweet.新規作成(user=user, text=request.form['text'])
     return redirect(url_for('users_timeline', name=user.name))
+
+@app.route("/users/<name>")
+def user(name):
+    user=User.取得(name)
+    tweets = Tweet.取得(author=user)
+    return render_template('timeline.html', user=user, tweets=tweets)
 
