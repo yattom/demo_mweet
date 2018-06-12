@@ -25,6 +25,12 @@ class User:
     def 自分のツイート(self):
         return Tweet.tweet_from_user(self)
 
+    def フォローする(self, target):
+        Follow.新規作成(target=target, follower=self)
+
+    def get_followings(self):
+        return Follow.フォローしているユーザー(self)
+
 class Tweet:
     tweets = []
 
@@ -40,17 +46,46 @@ class Tweet:
     def tweet_from_user(author):
         return [t for t in Tweet.tweets if t.author == author]
 
+    @staticmethod
+    def すべてのツイート():
+        return Tweet.tweets
+
 
 class Follow:
     follows = []
 
-User.新規作成('自分')
+    @staticmethod
+    def 新規作成(target, follower):
+        follow = Follow()
+        follow.target = target
+        follow.follower = follower
+        Follow.follows.append(follow)
+        return follow
+
+    @staticmethod
+    def フォローしているユーザー(follower):
+        return [f.target for f in Follow.follows if f.follower == follower]
+
+
+class Timeline:
+    def __init__(self, user):
+        self.user = user
+
+    def 表示するツイート(self):
+        return [t for t in Tweet.tweets
+                if t.author == self.user or t.author in self.user.get_followings()]
+
+
+user自分 = User.新規作成('自分')
+userAさん = User.新規作成('Aさん')
+userBさん = User.新規作成('Bさん')
+userBさん.フォローする(userAさん)
 
 
 @app.route("/")
 def index():
     users = User.users
-    tweets = []
+    tweets = Tweet.すべてのツイート()
     return render_template('index.html', users=users, tweets=tweets)
 
 @app.route("/login")
@@ -61,8 +96,10 @@ def login():
 @app.route("/timeline")
 def users_timeline():
     user = User.取得(session['login'])
-    tweets = user.自分のツイート()
-    return render_template('timeline.html', user=user, tweets=tweets)
+    follow_targets = user.get_followings()
+    timeline = Timeline(user)
+    tweets = timeline.表示するツイート()
+    return render_template('timeline.html', user=user, follow_targets=follow_targets, tweets=tweets)
 
 @app.route("/users/create", methods=['POST'])
 def create_user():
@@ -76,11 +113,14 @@ def create_tweet(name):
 
 @app.route("/users/<name>")
 def user(name):
-    user = None
-    tweets = []
+    user = User.取得(name)
+    tweets = user.自分のツイート()
     return render_template('user.html', user=user, tweets=tweets)
 
 @app.route("/users/<name>/follow", methods=['POST'])
 def follow_user(name):
+    user = User.取得(session['login'])
+    target = User.取得(name)
+    user.フォローする(target)
     return redirect(url_for('user', name=target.name))
 

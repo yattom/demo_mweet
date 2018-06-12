@@ -6,6 +6,10 @@
 </head>
 <body>
   <h1>{{ user.name}}のタイムライン / <a href="/">mwitter!</a></h1>
+  <h2>フォローしているユーザー</h2>
+  {% for target in follow_targets %}
+    <div>{{ target.name }}</div>
+  {% endfor %}
   <h2>ツイート</h2>
   <div class="form">
     <form action="{{ url_for('create_tweet', name=user.name) }}" method="POST">
